@@ -11,4 +11,3 @@ output "aws_public_subnets_cidr_blocks" { value = module.vpc.public_subnets_cidr
 output "aws_private_subnets" { value = module.vpc.private_subnets }
 output "aws_private_subnets_cidr_blocks" { value = module.vpc.private_subnets_cidr_blocks }
 output "aws_cidr" { value = module.vpc.vpc_cidr_block }
-output "aws_vault_kms_key_id" { value = aws_kms_key.vault_kms_unseal_key.key_id }

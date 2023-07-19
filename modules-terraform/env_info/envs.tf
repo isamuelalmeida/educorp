@@ -8,6 +8,7 @@ locals {
       environment     = "dev"
       account_id      = "638081184541"
       region          = "us-east-1"
+      profile          = "operator_dev"
       domain          = "dev.educorp.app"
       certificate_arn = "arn:aws:acm:us-east-1:703669458031:certificate/85fefb8d-1fd5-4b84-8f37-858612b15df0"
 
@@ -17,7 +18,7 @@ locals {
         private_subnets  = ["10.200.0.0/19", "10.200.32.0/19", "10.200.64.0/19"]
         public_subnets   = ["10.200.96.0/21", "10.200.104.0/21", "10.200.112.0/21"]
         database_subnets = ["10.200.128.0/22", "10.200.132.0/22", "10.200.136.0/22"]
-        cidr             = "10.230.0.0/16"
+        cidr             = "10.200.0.0/16"
       }
 
       eks = {
@@ -99,6 +100,7 @@ locals {
       environment     = "production"
       account_id      = "xxx"
       region          = "us-east-1"
+      profile          = "operator"
       domain          = "platosedu.io"
       certificate_arn = "arn:aws:acm:us-east-1:xxx:certificate/8e7e91aa-4fa9-470b-b283-5c18000c9362"
 
