@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hermes-consumers
+  labels:
+    app: hermes-consumers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hermes-consumers
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hermes-consumers
+    spec:
+      containers:
+        - name: hermes-consumers
+          image: allegro/hermes-consumers:hermes-{{ .Chart.AppVersion }}
+          imagePullPolicy: Always
+          volumeMounts:
+          - mountPath: /etc/hermes
+            name: hermes-conf
+          env:
+          - name: HERMES_CONSUMERS_OPTS
+            value: "-Darchaius.configurationSource.additionalUrls=file:///etc/hermes/consumers.properties -Dlogback.configurationFile=/etc/hermes/logback.xml"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 500Mi
+      volumes:
+      - name: hermes-conf
+        configMap:
+          name: hermes-conf
+          items:
+            - key: consumers.properties
+              path: consumers.properties
+            - key: logback.xml
+              path: logback.xml
+      nodeSelector:
+        nodeTypeClass: {{ .Values.nodeSelector.nodeTypeClass }}      
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hermes-management
+  labels:
+    app: hermes-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hermes-management
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hermes-management
+    spec:
+      containers:
+        - name: hermes-management
+          image: allegro/hermes-management:hermes-{{ .Chart.AppVersion }}
+          ports:
+            - containerPort: 8090
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /etc/hermes
+            name: hermes-conf
+          env:
+          - name: HERMES_MANAGEMENT_OPTS
+            value: "-Darchaius.configurationSource.additionalUrls=file:///etc/hermes/management.yaml -Dlogback.configurationFile=/etc/hermes/logback.xml"
+          - name: SPRING_CONFIG_LOCATION
+            value: "file:///etc/hermes/management.yaml"
+          resources:        
+            requests:
+              cpu: 200m
+              memory: 200Mi
+            limits:
+              cpu: 600m
+              memory: 1Gi
+      volumes:
+      - name: hermes-conf
+        configMap:
+          name: hermes-conf
+          items:
+            - key: management.yaml
+              path: management.yaml
+            - key: logback.xml
+              path: logback.xml
+      nodeSelector:
+        nodeTypeClass: {{ .Values.nodeSelector.nodeTypeClass }}      
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hermes-frontend
+  labels:
+    app: hermes-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hermes-frontend
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hermes-frontend
+    spec:
+      containers:
+        - name: hermes-frontend
+          image: allegro/hermes-frontend:hermes-{{ .Chart.AppVersion }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8090
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /etc/hermes
+            name: hermes-conf
+          env:
+          - name: HERMES_FRONTEND_OPTS
+            value: "-Dfrontend.port=8090 -Darchaius.configurationSource.additionalUrls=file:///etc/hermes/frontend.properties -Dlogback.configurationFile=/etc/hermes/logback.xml"
+          resources:        
+            requests:
+              cpu: 50m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 500Mi
+      volumes:
+      - name: hermes-conf
+        configMap:
+          name: hermes-conf
+          items:
+            - key: frontend.properties
+              path: frontend.properties
+            - key: logback.xml
+              path: logback.xml
+      nodeSelector:
+        nodeTypeClass: {{ .Values.nodeSelector.nodeTypeClass }}      

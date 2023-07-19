@@ -1,0 +1,3 @@
+- ## [Inicializando](subitems/vault-initialization.md) o cofre do Vault após fazer o deploy via terraform
+- ## [Atuando](subitems/too-many-connections-error.md) no problema "Error 1040: Too many conections"
+- ## [Atuando](subitems/authentication-error-sidecard-pod.md) no problema de autenticação das aplicações com o Vault

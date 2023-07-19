@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-conf
+data:
+  consumers.properties: |
+    zookeeper.connect.string=zoo-entrance:2181
+    zookeeper.root=/run/hermes
+    zookeeper.connection.timeout=5000
+    zookeeper.session.timeout=7000
+    kafka.broker.list=kafka-cluster-kafka-bootstrap:9092
+    consumer.workload.consumers.per.subscription=1
+  frontend.properties: |
+    zookeeper.connect.string=zookeeper-service:2181
+    zookeeper.root=/run/hermes
+    kafka.broker.list=kafka-cluster-kafka-bootstrap:9092
+    kafka.topic.partitions=4
+    kafka.topic.replication.factor=1
+  management.yaml: |
+    zookeeper:
+      enabled: false
+    storage:
+      pathPrefix: /run/hermes
+      clusters:
+        -
+          datacenter: dc
+          clusterName: zk
+          connectionString: zoo-entrance:2181
+    kafka:
+      clusters:
+        -
+          datacenter: dc
+          clusterName: primary
+          connectionTimeout: 3000
+          bootstrapKafkaServer: kafka-cluster-kafka-bootstrap:9092
+    server:
+      port: 8090
+    spring:
+      jersey:
+        type: filter
+    management:
+      endpoints:
+        web:
+          base-path: /
+      rest-template:
+        connect-timeout: 2000
+        read-timeout: 2000
+      server:
+        servlet:
+          context-path: /
+      health:
+        periodSeconds: 30
+        enabled: true
+      consumer-groups:
+        create-manually: true
+    audit.enabled: false
+    topicOwnerCache:
+      refreshRateInSeconds: 300 # 5 minutes
+    subscriptionOwnerCache:
+      refreshRateInSeconds: 300
+    console:
+      configurationLocation: console/config-local.json
+      configurationType: classpath_resource
+    topic:
+      allowRemoval: true
+  logback.xml: |
+    <configuration>
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <withJansi>true</withJansi>
+            <encoder>
+                <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <logger name="pl.allegro.tech.hermes" level="INFO"/>
+        <logger name="org.apache.zookeeper" level="ERROR"/>
+        <logger name="kafka" level="WARN"/>
+        <logger name="org.I0Itec.zkclient" level="WARN"/>
+        <logger name="kafka.consumer.PartitionTopicInfo" level="INFO"/>
+        <logger name="org.apache.curator.retry.ExponentialBackoffRetry" level="OFF"/>
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </configuration>
