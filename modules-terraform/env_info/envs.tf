@@ -8,21 +8,20 @@ locals {
       environment     = "dev"
       account_id      = "638081184541"
       region          = "us-east-1"
-      profile          = "operator_dev"
       domain          = "dev.educorp.app"
       certificate_arn = "arn:aws:acm:us-east-1:703669458031:certificate/85fefb8d-1fd5-4b84-8f37-858612b15df0"
 
       vpc = {
-        vpc_name         = "cognalabs-dev"
+        vpc_name         = "educorp-dev"
         azs              = ["us-east-1a", "us-east-1b", "us-east-1c"]
-        private_subnets  = ["10.200.0.0/19", "10.200.32.0/19", "10.200.64.0/19"]
-        public_subnets   = ["10.200.96.0/21", "10.200.104.0/21", "10.200.112.0/21"]
-        database_subnets = ["10.200.128.0/22", "10.200.132.0/22", "10.200.136.0/22"]
-        cidr             = "10.200.0.0/16"
+        private_subnets  = ["10.200.0.0/24", "10.200.1.0/24", "10.200.2.0/24"]
+        public_subnets   = ["10.200.3.0/26", "10.200.3.64/26", "10.200.3.128/26"]
+        database_subnets = ["10.200.3.192/28", "10.200.3.208/28", "10.200.3.224/28"]
+        cidr             = "10.200.0.0/22"
       }
 
       eks = {
-        cluster_name    = "cognalabs-eks-dev"
+        cluster_name    = "educorp-eks-dev"
         cluster_version = "1.24"
 
         aws_auth_users = [
@@ -100,7 +99,6 @@ locals {
       environment     = "production"
       account_id      = "xxx"
       region          = "us-east-1"
-      profile          = "operator"
       domain          = "platosedu.io"
       certificate_arn = "arn:aws:acm:us-east-1:xxx:certificate/8e7e91aa-4fa9-470b-b283-5c18000c9362"
 
@@ -186,7 +184,7 @@ locals {
       
       }      
 
-      aws_provider_role_arn = "arn:aws:iam::583181080694:role/OrganizarionAccountAccessRole"
+      aws_provider_role_arn = "arn:aws:iam::583181080694:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Operator_Access_4c61badad3d1f3d3"
     }
 
     alb = {

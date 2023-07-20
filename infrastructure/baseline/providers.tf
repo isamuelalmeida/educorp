@@ -5,7 +5,7 @@ terraform {
     bucket = "infra-cognalabs-terraform-state"
     key    = "infra-cognalabs-baseline.tfstate"
     region = "us-east-1"
-    profile = "operator"
+    profile = "educorp_prod"
   }
   required_providers {
     aws = {
@@ -18,7 +18,9 @@ terraform {
 provider "aws" {
   region = module.env_info.envs[terraform.workspace].region
 
-  profile = module.env_info.envs[terraform.workspace].profile
+  assume_role {
+    role_arn = module.env_info.envs[terraform.workspace].aws_provider_role_arn
+  }
 
   default_tags {
     tags = merge(
