@@ -2,28 +2,20 @@ data "terraform_remote_state" "baseline" {
   backend   = "s3"
   workspace = terraform.workspace
   config = {
-    bucket = "infra-platos-terraform-state"
-    key    = "infra-platos-baseline.tfstate"
+    bucket = "infra-cognalabs-terraform-state"
+    key    = "infra-cognalabs-baseline.tfstate"
     region = "us-east-1"
+    profile = "educorp_prod"
   }
 }
 
 data "terraform_remote_state" "iam" {
-  workspace = terraform.workspace == "production" ? terraform.workspace : "default"
+  workspace = terraform.workspace == "dev" ? terraform.workspace : "production"
   backend = "s3"
   config = {
-    bucket = "infra-platos-terraform-state"
-    key    = "infra-platos-iam.tfstate"
+    bucket = "infra-cognalabs-terraform-state"
+    key    = "infra-cognalabs-iam.tfstate"
     region = "us-east-1"
-  }
-}
-
-data "terraform_remote_state" "vpn" {
-  backend   = "s3"
-  workspace = terraform.workspace
-  config = {
-    bucket = "infra-platos-terraform-state"
-    key    = "infra-platos-vpn.tfstate"
-    region = "us-east-1"
+    profile = "educorp_prod"
   }
 }

@@ -2,9 +2,10 @@ terraform {
   required_version = ">= 0.13"
 
   backend "s3" {
-    bucket = "infra-platos-terraform-state"
-    key    = "infra-platos-eks.tfstate"
+    bucket = "infra-cognalabs-terraform-state"
+    key    = "infra-cognalabs-eks.tfstate"
     region = "us-east-1"
+    profile = "educorp_prod"
   }
   required_providers {
     aws = {

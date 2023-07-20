@@ -11,8 +11,7 @@ variable "tags" {
 
 variable "node_group_name_by_env" {
   default = {
-    dev        = "cosmos-eks-dev"
-    stage      = "cosmos-eks-stg"
-    production = "cosmos-eks-prd"
+    dev        = "eco-eks-dev"
+    production = "eco-eks-prd"
   }
 }
