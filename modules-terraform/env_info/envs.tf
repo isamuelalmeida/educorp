@@ -26,7 +26,7 @@ locals {
 
         aws_auth_users = [
           {
-            userarn  = "arn:aws:iam::703669458031:role/AWSReservedSSO_Operator_Access_8966e92af2ed681d"
+            userarn  = "arn:aws:iam::638081184541:role/AWSReservedSSO_Operator_Access_efd4f25f68661910"
             username = "*"
             groups   = ["system:masters"]
           }
@@ -34,7 +34,7 @@ locals {
 
         aws_auth_roles = [
           {
-            rolearn  = "arn:aws:iam::703669458031:role/cosmos-eks-dev-initial-eks-node-group-20230509124524025500000001"
+            rolearn  = "arn:aws:iam::638081184541:role/eco-eks-dev-initial-eks-node-group-20230720160555142700000002"
             username = "system:node:{{EC2PrivateDNSName}}"
             groups   = ["system:bootstrappers", "system:nodes"]
           }
@@ -74,7 +74,7 @@ locals {
                 arch                = ["amd64"]
                 capacity_type       = ["spot"]
                 instance_family     = ["m6a", "t3a", "c6a"]
-                instance_cpu        = ["4"]
+                instance_cpu        = ["2", "4", "8"]
               }
               limits = {
                 cpu    = "16"

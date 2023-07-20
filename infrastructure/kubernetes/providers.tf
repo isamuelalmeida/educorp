@@ -2,9 +2,10 @@ terraform {
   required_version = ">= 0.13"
 
   backend "s3" {
-    bucket = "infra-platos-terraform-state"
-    key    = "infra-platos-kubernetes.tfstate"
+    bucket = "infra-cognalabs-terraform-state"
+    key    = "infra-cognalabs-kubernetes.tfstate"
     region = "us-east-1"
+    profile = "educorp_prod"
   }
   required_providers {
     kubernetes = {
@@ -72,19 +73,4 @@ provider "helm" {
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
     token                  = data.aws_eks_cluster_auth.cluster.token
   }
-}
-
-provider "keycloak" {
-  # Obs: Ver arquivo modules/keycloak/README.md com as instrução para configurar o client do terraform no Keycloak
-  client_id     = data.aws_ssm_parameter.keycloak_terraform_client_id.value
-  client_secret = data.aws_ssm_parameter.keycloak_terraform_client_secret.value
-  url           = "https://sso.${module.env_info.envs[terraform.workspace].domain}"
-  # base_path deve ficar vazio após a migração do WildFly para o Quarkus
-  # https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs#base_path
-  # base_path = contains(["dev"], terraform.workspace) ? "/auth" : ""
-}
-
-provider "vault" {
-  address = "https://vault.${module.env_info.envs[terraform.workspace].domain}"
-  token   = lookup(local.vault_cluster_keys, "root_token")
 }

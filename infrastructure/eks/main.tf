@@ -42,11 +42,11 @@ module "eks" {
     }
   }
 
-  # manage_aws_auth_configmap = true
+  manage_aws_auth_configmap = true
 
-  # aws_auth_accounts = [module.env_info.envs[terraform.workspace].account_id]
-  # aws_auth_users    = module.env_info.envs[terraform.workspace].eks.aws_auth_users
-  # aws_auth_roles    = module.env_info.envs[terraform.workspace].eks.aws_auth_roles
+  aws_auth_accounts = [module.env_info.envs[terraform.workspace].account_id]
+  aws_auth_users    = module.env_info.envs[terraform.workspace].eks.aws_auth_users
+  aws_auth_roles    = module.env_info.envs[terraform.workspace].eks.aws_auth_roles
 
   enable_irsa = true
 
