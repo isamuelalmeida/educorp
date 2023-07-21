@@ -22,24 +22,14 @@ resource "helm_release" "prometheus" {
     grafana:
       enabled: false
 
-    prometheusOperator:
-      nodeSelector:
-        nodeTypeClass: observability
-
     ## Deploy a Prometheus instance
     ##
     prometheus:
       prometheusSpec:
-        nodeSelector:
-          nodeTypeClass: observability
         enableRemoteWriteReceiver: true
         enableFeatures:
         - web.enable-remote-write-receiver
         - memory-snapshot-on-shutdown
-        remoteWrite:
-          - headers:
-              X-Scope-OrgID: platos-nonprod
-            url: http://vpce-0bc35cf61c9541e46-1trpknuf.vpce-svc-010e9aedbb2d9c327.us-east-1.vpce.amazonaws.com:8080/api/v1/push #Endpoint do Grafana Mimir Central da Ampli
         retention: 60d
         retentionSize: 49GB
         storageSpec:
@@ -94,13 +84,7 @@ resource "helm_release" "prometheus" {
               module: [http_2xx]
             static_configs:
               - targets:
-                - https://kroton${contains(["production"], var.environment) ? "" : ".${var.environment}"}.platosedu.io/erp
-                - https://kroton${contains(["production"], var.environment) ? "" : ".${var.environment}"}.platosedu.io/lms
-                - https://upf${contains(["production"], var.environment) ? "" : ".${var.environment}"}.platosedu.io
-                - https://umc${contains(["production"], var.environment) ? "" : ".${var.environment}"}.platosedu.io
-                - https://utp${contains(["production"], var.environment) ? "" : ".${var.environment}"}.platosedu.io
-                - http://service-payment.service-payment:8081/health
-                - http://service-bankslip.service-bankslip:8081/health
+                - https://callink${contains(["production"], var.environment) ? "" : ".${var.environment}"}.educorp.app
             relabel_configs:
             - source_labels: [__address__]
               target_label: __param_target
@@ -108,87 +92,6 @@ resource "helm_release" "prometheus" {
               target_label: target
             - target_label: __address__ 
               replacement: prometheus-blackbox-exporter.prometheus:9115
-    EOT
-  ]
-}
-
-resource "helm_release" "prometheus_postgres_exporter" {
-  atomic = true
-
-  repository = "https://prometheus-community.github.io/helm-charts"
-
-  name    = "rds-cosmos"
-  chart   = "prometheus-postgres-exporter"
-  version = "2.10.1"
-
-  namespace = "prometheus"
-
-  values = [<<-EOT
-      annotations:
-        prometheus.io/port: "9187"
-        prometheus.io/scrape: "true"
-
-      resources:
-        limits:
-          cpu: 1000m
-          memory: 128Mi
-        requests:
-          cpu: 500m
-          memory: 64Mi
-
-      config:
-        datasource:
-          host: ${var.cosmos_database_instance_address}
-          user: ${var.cosmos_monitoring_database_username}
-          password: ${var.cosmos_monitoring_database_password}
-          database: "postgres"
-  
-    EOT
-  ]
-}
-
-resource "helm_release" "gitlab_ci_pipelines_exporter" {
-  count = var.environment == "production" ? 1 : 0
-
-  atomic = true
-
-  repository = "https://charts.visonneau.fr"
-
-  name    = "gitlab-ci-pipelines-exporter"
-  chart   = "gitlab-ci-pipelines-exporter"
-  version = "v0.2.6"
-
-  namespace = "prometheus"
-
-  values = [<<-EOT
-    redis:
-      enabled: false
-    config:
-      log:
-        level: debug
-      gitlab:
-        url: https://gitlab.com
-        token: ${var.prometheus_gitlab_token}
-      wildcards:
-        - owner:
-            name: platosedu
-            kind: group
-            include_subgroups: true
-      project_defaults:
-        pull:
-          refs:
-            branches:
-              enabled: true
-              regexp: "^main|master|stage|dev$"
-              most_recent: 10
-            tags:
-              enabled: false
-            merge_requests:
-              enabled: true
-              most_recent: 10
-          pipeline:
-            jobs:
-              enabled: true
     EOT
   ]
 }

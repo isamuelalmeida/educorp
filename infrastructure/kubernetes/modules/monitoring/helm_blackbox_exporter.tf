@@ -1,4 +1,6 @@
 resource "helm_release" "blackbox_exporter" {
+  depends_on = [ helm_release.prometheus ]
+
   atomic = true
 
   repository = "https://prometheus-community.github.io/helm-charts"
@@ -9,10 +11,4 @@ resource "helm_release" "blackbox_exporter" {
 
   namespace = "prometheus"
 
-  values = [<<-EOT
-    nodeSelector:
-      nodeTypeClass: observability
-
-  EOT
-  ]
 }

@@ -20,14 +20,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "4.67.0"
     }
-    keycloak = {
-      source  = "mrparkers/keycloak"
-      version = "3.9.1"
-    }
-    vault = {
-      source  = "hashicorp/vault"
-      version = "3.7.0"
-    }
     tls = {
       source  = "hashicorp/tls"
       version = "3.1.0"

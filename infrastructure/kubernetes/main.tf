@@ -2,10 +2,6 @@ module "monitoring" {
   source = "./modules/monitoring"
 
   environment = module.env_info.envs[terraform.workspace].environment
-
-  cosmos_monitoring_database_username = data.aws_ssm_parameter.cosmos_monitoring_database_username.value
-  cosmos_monitoring_database_password = data.aws_ssm_parameter.cosmos_monitoring_database_password.value
-  cosmos_database_instance_address    = data.aws_ssm_parameter.cosmos_database_host.value
 }
 
 module "load_balancer_controller" {

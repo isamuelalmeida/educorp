@@ -13,10 +13,10 @@ resource "helm_release" "gitlab_runner" {
     value = "https://gitlab.com/"
   }
 
-  set {
-    name  = "runnerRegistrationToken"
-    value = data.aws_ssm_parameter.gitlab_runner_registration_token.value
-  }
+  # set {
+  #   name  = "runnerRegistrationToken"
+  #   value = data.aws_ssm_parameter.gitlab_runner_registration_token.value
+  # }
 
   set {
     name  = "runners.privileged"
