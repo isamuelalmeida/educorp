@@ -9,10 +9,10 @@ locals {
       account_id      = "638081184541"
       region          = "us-east-1"
       domain          = "dev.educorp.app"
-      certificate_arn = "arn:aws:acm:us-east-1:703669458031:certificate/85fefb8d-1fd5-4b84-8f37-858612b15df0"
+      certificate_arn = ""
 
       vpc = {
-        vpc_name         = "educorp-dev"
+        vpc_name         = "cognalabs-dev"
         azs              = ["us-east-1a", "us-east-1b", "us-east-1c"]
         private_subnets  = ["10.211.8.0/24", "10.211.9.0/24", "10.211.10.0/24"]
         public_subnets   = ["10.211.11.0/26", "10.211.11.64/26", "10.211.11.128/26"]
@@ -21,7 +21,7 @@ locals {
       }
 
       eks = {
-        cluster_name    = "educorp-eks-dev"
+        cluster_name    = "cognalabs-dev"
         cluster_version = "1.24"
 
         aws_auth_users = [
@@ -34,7 +34,7 @@ locals {
 
         aws_auth_roles = [
           {
-            rolearn  = "arn:aws:iam::638081184541:role/eco-eks-dev-initial-eks-node-group-20230720160555142700000002"
+            rolearn  = "arn:aws:iam::638081184541:role/cognalabs-dev-initial-eks-node-group-20230722002036531600000001"
             username = "system:node:{{EC2PrivateDNSName}}"
             groups   = ["system:bootstrappers", "system:nodes"]
           }
@@ -97,13 +97,13 @@ locals {
 
     production = {
       environment     = "production"
-      account_id      = "xxx"
+      account_id      = "583181080694"
       region          = "us-east-1"
-      domain          = "platosedu.io"
-      certificate_arn = "arn:aws:acm:us-east-1:xxx:certificate/8e7e91aa-4fa9-470b-b283-5c18000c9362"
+      domain          = "educorp.app"
+      certificate_arn = ""
 
       vpc = {
-        vpc_name         = "platos-production"
+        vpc_name         = "cognalabs-prd"
         azs              = ["us-east-1a", "us-east-1b", "us-east-1c"]
         private_subnets  = ["10.200.0.0/22", "10.200.4.0/22", "10.200.8.0/22"]
         public_subnets   = ["10.200.12.0/24", "10.200.13.0/24", "10.200.14.0/24"]
@@ -112,12 +112,12 @@ locals {
       }
 
       eks = {
-        cluster_name    = "cosmos-eks-production"
+        cluster_name    = "cognalabs-prd"
         cluster_version = "1.24"
 
         aws_auth_users = [
           {
-            userarn  = "arn:aws:iam::200535794330:role/AWSReservedSSO_Operator_Access_3cc672357dc5c5a8"
+            userarn  = "arn:aws:iam::583181080694:role/AWSReservedSSO_Operator_Access_3cc672357dc5c5a8"
             username = "*"
             groups   = ["system:masters"]
           }
@@ -125,7 +125,7 @@ locals {
 
         aws_auth_roles = [
           {
-            rolearn  = "arn:aws:iam::200535794330:role/cosmos-eks-prd-initial-eks-node-group-20230706191607446100000002"
+            rolearn  = "arn:aws:iam::583181080694:role/cosmos-eks-prd-initial-eks-node-group-20230706191607446100000002"
             username = "system:node:{{EC2PrivateDNSName}}"
             groups   = ["system:bootstrappers", "system:nodes"]
           }
@@ -199,14 +199,14 @@ locals {
       "conjunto-orcamentario" = "431082276051320606200323"
       "contato-gestor"        = "nome@educorp.app"
       "contato-tecnico"       = "nome@educorp.app"
-      "cadeia-valor"          = "Educacao Corporativa"
-      "sn-produto"            = "platos"
-      "sn-modulo"             = "platos"
+      "cadeia-valor"          = "Cogna Labs"
+      "sn-produto"            = "CognaLabs"
+      "sn-modulo"             = "CognaLabs"
       "iac"                   = "Terraform"
       "repo"                  = "https://gitlab.com/platosedu/cosmos/devops/infra-platos"
     }
     default_tag_estagio_by_env = {
-      "default"    = "DEV"
+      "default"    = "PRD"
       "dev"        = "DEV"
       "production" = "PRD"
     }

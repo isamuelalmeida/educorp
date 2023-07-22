@@ -29,14 +29,17 @@ module "educorp_rds" {
 
   apply_immediately = true
 
-  vpc_security_group_ids = local.envs[terraform.workspace].rds_security_group_ids
+  vpc_security_group_ids = [
+    data.terraform_remote_state.baseline.outputs.vpc_default_security_group_id,
+    data.terraform_remote_state.eks.outputs.eks_cluster_primary_security_group_id
+  ]
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
 
   # DB subnet group
-  db_subnet_group_name = local.envs[terraform.workspace].vpc_database_subnet_group_name
-  subnet_ids           = local.envs[terraform.workspace].vpc_database_subnets
+  db_subnet_group_name = data.terraform_remote_state.baseline.outputs.vpc_database_subnet_group_name
+  subnet_ids           = data.terraform_remote_state.baseline.outputs.vpc_database_subnets
 
   family = "mysql8.0"
 

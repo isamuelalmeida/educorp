@@ -1,10 +1,22 @@
+data "terraform_remote_state" "eks" {
+  backend   = "s3"
+  workspace = terraform.workspace
+  config = {
+    bucket = "infra-cognalabs-terraform-state"
+    key    = "infra-cognalabs-eks.tfstate"
+    region = "us-east-1"
+    profile = "educorp_prod"
+  }
+}
+
 data "terraform_remote_state" "baseline" {
   backend   = "s3"
   workspace = terraform.workspace
   config = {
-    bucket = "infra-platos-terraform-state"
-    key    = "infra-platos-baseline.tfstate"
+    bucket = "infra-cognalabs-terraform-state"
+    key    = "infra-cognalabs-baseline.tfstate"
     region = "us-east-1"
+    profile = "educorp_prod"
   }
 }
 

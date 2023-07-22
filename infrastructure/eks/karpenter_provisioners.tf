@@ -62,6 +62,6 @@ resource "kubectl_manifest" "karpenter_node_template_default" {
       tags:
         karpenter.sh/discovery: ${module.env_info.envs[terraform.workspace].eks.cluster_name}
         estagio: ${module.env_info.envs.default_tag_estagio_by_env[terraform.workspace]}
-        sn-produto: educorp
+        sn-produto: CognaLabs
   YAML
 }

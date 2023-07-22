@@ -8,10 +8,3 @@ variable "tags" {
     "Terraform" = "true"
   }
 }
-
-variable "node_group_name_by_env" {
-  default = {
-    dev        = "eco-eks-dev"
-    production = "eco-eks-prd"
-  }
-}

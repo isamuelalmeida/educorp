@@ -74,7 +74,7 @@ module "eks_managed_node_group_initial" {
   source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
   version = "18.31.2"
 
-  name            = "${var.node_group_name_by_env[terraform.workspace]}-initial"
+  name            = "${module.env_info.envs[terraform.workspace].eks.cluster_name}-initial"
   cluster_name    = module.env_info.envs[terraform.workspace].eks.cluster_name
   cluster_version = module.env_info.envs[terraform.workspace].eks.cluster_version
 
